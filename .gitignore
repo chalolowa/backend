@@ -1,0 +1,51 @@
+# Python specific
+__pycache__
+*.pyc
+*.pyd
+*.pyo
+.Python
+env
+.env
+venv
+.venv
+lib/
+lib64/
+include/
+share/
+bin/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+
+# FastAPI and common tools
+.mypy_cache/
+.pytest_cache/
+htmlcov/
+.coverage*
+coverage.xml
+test.db # For local testing databases
+log.txt
+Pipfile.lock # Recommended to include in version control, but sometimes ignored
+site/
+.netlify
+docs_build/
+site_build/
+docs.zip
+archive.zip
+
+# IDE specific files
+.idea/ # JetBrains IDEs
+.vscode/ # VS Code
+*~ # temporary files
+
+# OS specific files
+.DS_Store # macOS
+.directory # KDE/Linux
