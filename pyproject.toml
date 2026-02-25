@@ -3,5 +3,17 @@ name = "backend"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
+    "africastalking>=2.0.2",
+    "alembic>=1.18.4",
+    "asyncpg>=0.31.0",
     "fastapi[standard]>=0.129.0",
+    "httpx>=0.28.1",
+    "myapplication>=0.1.0",
+    "psycopg2-binary>=2.9.11",
+    "pydantic>=2.12.5",
+    "python-dotenv>=1.2.1",
+    "redis>=7.2.0",
+    "requests>=2.32.5",
+    "sqlalchemy>=2.0.46",
+    "uvicorn>=0.40.0",
 ]

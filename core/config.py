@@ -1,0 +1,14 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+AFRICASTALKING_API_KEY = os.getenv("AFRICASTALKING_API_KEY")
+AFRICASTALKING_USERNAME = os.getenv("AFRICASTALKING_USERNAME")
+AFRICASTALKING_SENDER_ID = os.getenv("AFRICASTALKING_SENDER_ID")
+N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL")
+N8N_API_KEY = os.getenv("N8N_API_KEY")
+REDIS_URL = os.getenv("REDIS_URL")
+REDIS_API_KEY = os.getenv("REDIS_API_KEY")
+REDIS_SESSION_TTL = int(os.getenv("REDIS_SESSION_TTL",300))
