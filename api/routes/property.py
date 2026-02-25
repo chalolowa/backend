@@ -4,7 +4,7 @@ from typing import List
 from core.database import get_db
 from models.property import Property as PropertyModel, Unit as UnitModel
 from models.tenant import Tenant as TenantModel
-from schemas.property import Property, PropertyCreate, PropertyUpdate, Unit, UnitCreate
+from schemas.property import Property, PropertyCreate, PropertyUpdate, Unit, UnitCreate, PropertyDetail
 from api.deps import get_current_landlord
 
 router = APIRouter(prefix="/properties", tags=["Properties"])
@@ -46,7 +46,7 @@ async def create_property(
     return db_property
 
 
-@router.get("", response_model=List[Property])
+@router.get("", response_model=List[PropertyDetail])
 async def list_properties(
         current_landlord=Depends(get_current_landlord),
         db: Session = Depends(get_db),
@@ -54,15 +54,19 @@ async def list_properties(
         limit: int = 100
 ):
     """
-    List all properties for current landlord
+    List all properties for current landlord; include occupancy information.
     """
     properties = db.query(PropertyModel).filter(
         PropertyModel.landlord_id == current_landlord.id
     ).offset(skip).limit(limit).all()
 
-    # Calculate occupancy for each property
+    # Calculate occupancy and related metrics for each property
     for prop in properties:
-        prop.occupied_units = len([u for u in prop.units if u.is_occupied])
+        occupied = len([u for u in prop.units if u.is_occupied])
+        available = len([u for u in prop.units if not u.is_occupied])
+        prop.occupied_units = occupied
+        prop.available_units = available
+        prop.occupancy_rate = (occupied / prop.total_units * 100) if prop.total_units > 0 else 0
 
     return properties
 

@@ -1,8 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from core.database import get_db
 from models.landlord import Landlord as LandlordModel
 from api.deps import get_current_landlord
+from schemas.landlord import LandlordCreate, Landlord
+
 
 router = APIRouter(prefix="/landlords", tags=["Landlords"])
 
@@ -47,3 +49,43 @@ async def get_dashboard_stats(
         "payments": payment_summary,
         "overdue_count": len(overdue_payments)
     }
+
+
+# additional endpoints for landlord registration and profiling
+@router.post("", response_model=Landlord)
+async def create_landlord(
+        landlord_data: LandlordCreate,
+        db: Session = Depends(get_db)
+):
+    """
+    Create or return an existing landlord based on auth_provider_id.
+    """
+    existing = db.query(LandlordModel).filter(
+        LandlordModel.auth_provider_id == landlord_data.auth_provider_id
+    ).first()
+    if existing:
+        return existing
+
+    new_landlord = LandlordModel(
+        auth_provider_id=landlord_data.auth_provider_id,
+        email=landlord_data.email,
+        full_name=landlord_data.full_name,
+        phone=landlord_data.phone,
+        company_name=landlord_data.company_name,
+        tax_id=landlord_data.tax_id,
+        business_address=landlord_data.business_address
+    )
+    db.add(new_landlord)
+    db.commit()
+    db.refresh(new_landlord)
+    return new_landlord
+
+
+@router.get("/me", response_model=Landlord)
+async def get_my_profile(
+        current_landlord: LandlordModel = Depends(get_current_landlord)
+):
+    """
+    Return current landlord profile.
+    """
+    return current_landlord

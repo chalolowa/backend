@@ -5,35 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e621a3cc-d9ed-499e-8060-d8b11f1f2945" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/deps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/routes/accounting.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/routes/landlord.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/routes/payment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/routes/property.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/routes/tenant.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/routes/ussd.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/landlord.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/payment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/property.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/reminder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/tenant.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/schemas/landlord.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/schemas/payment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/schemas/property.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/schemas/tenant.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/accounting_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/n8n_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/sms_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/services/ussd_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/uv.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +96,7 @@
       <workItem from="1771929621737" duration="4860000" />
       <workItem from="1771935643781" duration="312000" />
       <workItem from="1771955388156" duration="4419000" />
-      <workItem from="1772002388008" duration="13669000" />
+      <workItem from="1772002388008" duration="14036000" />
     </task>
     <servers />
   </component>

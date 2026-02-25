@@ -234,6 +234,86 @@ async def send_payment_reminder(
     return {"message": "Reminder sent successfully"}
 
 
+@router.post("/remind/bulk")
+async def send_bulk_reminders(
+        property_id: int,
+        background_tasks: BackgroundTasks,
+        current_landlord=Depends(get_current_landlord),
+        db: Session = Depends(get_db)
+):
+    """
+    Send overdue reminders for all payments belonging to a particular property.
+    """
+    payments = db.query(PaymentModel).filter(
+        PaymentModel.landlord_id == current_landlord.id,
+        PaymentModel.property_id == property_id,
+        PaymentModel.status == PaymentStatus.OVERDUE
+    ).all()
+
+    count = 0
+    for payment in payments:
+        tenant = db.query(TenantModel).filter(TenantModel.id == payment.tenant_id).first()
+        days_overdue = (date.today() - payment.due_date).days if payment.due_date < date.today() else 0
+        if tenant:
+            background_tasks.add_task(
+                sms_service.send_overdue_reminder,
+                tenant_name=tenant.first_name,
+                phone=tenant.phone,
+                amount=payment.balance or payment.amount,
+                days_overdue=days_overdue
+            )
+            # trigger n8n as well
+            background_tasks.add_task(
+                n8n_service.trigger_overdue_payment,
+                {'tenant_id': tenant.id, 'tenant_name': f"{tenant.first_name} {tenant.last_name}"},
+                {
+                    'payment_id': payment.id,
+                    'amount': payment.amount,
+                    'due_date': payment.due_date.isoformat()
+                },
+                days_overdue
+            )
+            count += 1
+
+    return {"message": "Reminders queued", "count": count}
+
+
+@router.post("/remind/all-overdue")
+async def remind_all_overdue(
+        background_tasks: BackgroundTasks,
+        current_landlord=Depends(get_current_landlord),
+        db: Session = Depends(get_db)
+):
+    """
+    Send reminders for every overdue payment for the current landlord.
+    """
+    overdue = accounting_service.identify_overdue_payments(db, current_landlord.id)
+    count = 0
+    for payment in overdue:
+        tenant = db.query(TenantModel).filter(TenantModel.id == payment.tenant_id).first()
+        days_overdue = (date.today() - payment.due_date).days if payment.due_date < date.today() else 0
+        if tenant:
+            background_tasks.add_task(
+                sms_service.send_overdue_reminder,
+                tenant_name=tenant.first_name,
+                phone=tenant.phone,
+                amount=payment.balance or payment.amount,
+                days_overdue=days_overdue
+            )
+            background_tasks.add_task(
+                n8n_service.trigger_overdue_payment,
+                {'tenant_id': tenant.id, 'tenant_name': f"{tenant.first_name} {tenant.last_name}"},
+                {
+                    'payment_id': payment.id,
+                    'amount': payment.amount,
+                    'due_date': payment.due_date.isoformat()
+                },
+                days_overdue
+            )
+            count += 1
+    return {"message": "Reminders queued", "count": count}
+
+
 @router.get("/receipts", response_model=List[Receipt])
 async def list_receipts(
         current_landlord=Depends(get_current_landlord),
