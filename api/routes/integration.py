@@ -4,7 +4,7 @@ from datetime import date, timedelta, datetime
 from typing import List, Dict, Any
 
 from core.database import get_db
-from api.deps import require_api_key, get_current_landlord
+from api.deps import verify_n8n_service, get_current_landlord
 from services.sms_service import sms_service
 from services.accounting_service import accounting_service
 from models.payment import Payment as PaymentModel, PaymentStatus
@@ -21,7 +21,7 @@ router = APIRouter(prefix="", tags=["Integration"])
 async def get_tenant_by_phone(
         phone: str,
         db: Session = Depends(get_db),
-        api_key: None = Depends(require_api_key)
+        api_key: None = Depends(verify_n8n_service)
 ):
     """Lookup tenant record by phone number.
 
@@ -52,7 +52,7 @@ async def send_sms(
         phone: str,
         message: str,
         db: Session = Depends(get_db),
-        api_key: None = Depends(require_api_key)
+        api_key: None = Depends(verify_n8n_service)
 ):
     """Public endpoint for n8n workflows to send SMS via the service."""
     return await sms_service.send_sms(phone, message)
@@ -67,7 +67,7 @@ async def log_reminder(
         payment_id: int | None = None,
         message: str | None = None,
         db: Session = Depends(get_db),
-        api_key: None = Depends(require_api_key)
+        api_key: None = Depends(verify_n8n_service)
 ):
     """Record that an automated reminder was sent/attempted.
 
@@ -113,7 +113,7 @@ async def log_reminder(
 async def get_upcoming_payments(
         days: int = 3,
         db: Session = Depends(get_db),
-        api_key: None = Depends(require_api_key)
+        api_key: None = Depends(verify_n8n_service)
 ) -> Dict[str, Any]:
     """Return all payments due within the next `days` days.
 
@@ -149,7 +149,7 @@ async def get_upcoming_payments(
 async def tenant_balance_public(
         tenant_id: int,
         db: Session = Depends(get_db),
-        api_key: None = Depends(require_api_key)
+        api_key: None = Depends(verify_n8n_service)
 ):
     """Alias endpoint used by external automations to fetch balance. """
     balance = accounting_service.get_tenant_balance(db, tenant_id)
@@ -163,7 +163,7 @@ from schemas.tenant import IssueCreate
 async def issue_create_public(
         issue_data: IssueCreate,
         db: Session = Depends(get_db),
-        api_key: None = Depends(require_api_key)
+        api_key: None = Depends(verify_n8n_service)
 ):
     """Create an issue on behalf of a tenant (used by n8n AI workflow)."""
     tenant = db.query(TenantModel).filter(TenantModel.id == issue_data.tenant_id).first()
