@@ -23,9 +23,10 @@ async def get_dashboard_stats(
     properties = current_landlord.properties
     total_properties = len(properties)
     total_units = sum(p.total_units for p in properties)
-    # use the hybrid property added to Property model; it performs the same
-    # calculation and keeps all logic in one place.
-    occupied_units = sum(p.occupied_units for p in properties)
+    # compute occupied units by counting units directly from the relationships
+    occupied_units = sum(
+        len([u for u in p.units if u.is_occupied]) for p in properties
+    )
 
     # Get tenant stats
     tenants = current_landlord.tenants

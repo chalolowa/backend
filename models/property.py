@@ -37,11 +37,6 @@ class Property(Base):
     tenants = relationship("Tenant", back_populates="property")
     payments = relationship("Payment", back_populates="property")
 
-    @property
-    def occupied_units(self) -> int:
-        """Return number of units currently occupied."""
-        return len([u for u in self.units if getattr(u, 'is_occupied', False)])
-
 
 class Unit(Base):
     __tablename__ = "units"

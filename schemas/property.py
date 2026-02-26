@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List
 from datetime import datetime
 
@@ -73,3 +73,26 @@ class PropertyDetail(Property):
     available_units: int = 0
     occupancy_rate: float = 0
     total_tenants: int = 0
+
+    @field_validator('occupied_units', mode='before')
+    @classmethod
+    def compute_occupied_units(cls, v, info):
+        if 'units' in info.data and info.data['units']:
+            return len([u for u in info.data['units'] if getattr(u, 'is_occupied', False)])
+        return v
+
+    @field_validator('available_units', mode='before')
+    @classmethod
+    def compute_available_units(cls, v, info):
+        if 'units' in info.data and info.data['units']:
+            return len([u for u in info.data['units'] if not getattr(u, 'is_occupied', False)])
+        return v
+
+    @field_validator('occupancy_rate', mode='before')
+    @classmethod
+    def compute_occupancy_rate(cls, v, info):
+        if 'total_units' in info.data and info.data['total_units'] and 'units' in info.data:
+            occupied = len([u for u in info.data['units'] if getattr(u, 'is_occupied', False)])
+            total = info.data['total_units']
+            return (occupied / total * 100) if total > 0 else 0
+        return v

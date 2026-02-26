@@ -60,18 +60,12 @@ async def list_properties(
         PropertyModel.landlord_id == current_landlord.id
     ).offset(skip).limit(limit).all()
 
-    # Calculate occupancy and related metrics for each property
-    for prop in properties:
-        occupied = len([u for u in prop.units if u.is_occupied])
-        available = len([u for u in prop.units if not u.is_occupied])
-        prop.occupied_units = occupied
-        prop.available_units = available
-        prop.occupancy_rate = (occupied / prop.total_units * 100) if prop.total_units > 0 else 0
-
+    # Return properties as-is; the Pydantic response_model will compute
+    # occupied_units, available_units, and occupancy_rate using validators
     return properties
 
 
-@router.get("/{property_id}", response_model=Property)
+@router.get("/{property_id}", response_model=PropertyDetail)
 async def get_property(
         property_id: int,
         current_landlord=Depends(get_current_landlord),
@@ -88,16 +82,8 @@ async def get_property(
     if not property:
         raise HTTPException(status_code=404, detail="Property not found")
 
-    # Calculate occupancy
-    property.occupied_units = len([u for u in property.units if u.is_occupied])
-    property.available_units = len([u for u in property.units if not u.is_occupied])
-
-    # Get tenants count
-    property.total_tenants = db.query(TenantModel).filter(
-        TenantModel.property_id == property_id,
-        TenantModel.is_active == True
-    ).count()
-
+    # Return the property; Pydantic validators in PropertyDetail will
+    # compute occupied_units, available_units, and occupancy_rate
     return property
 
 
