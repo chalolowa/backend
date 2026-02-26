@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 import logging
 
 from core.config import REDIS_URL
-from api.routes import landlord, property, tenant, payment, accounting, ussd
+from api.routes import landlord, property, tenant, payment, accounting, ussd, integration
 from core.database import engine, Base
 
 # Configure logging
@@ -40,6 +40,8 @@ app.include_router(tenant.router)
 app.include_router(payment.router)
 app.include_router(accounting.router)
 app.include_router(ussd.router)
+# Integration endpoints used by n8n and other automation
+app.include_router(integration.router)
 
 @app.get("/")
 async def root():

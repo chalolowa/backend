@@ -10,6 +10,8 @@ class ReminderType(enum.Enum):
     LEASE_EXPIRY = "lease_expiry"
     MAINTENANCE = "maintenance"
     GENERAL = "general"
+    UPCOMING = "upcoming"
+    OVERDUE = "overdue"
 
 
 class ReminderStatus(enum.Enum):
@@ -25,6 +27,7 @@ class Reminder(Base):
     id = Column(Integer, primary_key=True, index=True)
     landlord_id = Column(Integer, ForeignKey("landlords.id"), nullable=False)
     tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=False)
+    payment_id = Column(Integer, ForeignKey("payments.id"), nullable=True)
 
     # Reminder details
     reminder_type = Column(Enum(ReminderType), nullable=False)
