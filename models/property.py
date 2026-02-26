@@ -29,7 +29,7 @@ class Property(Base):
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     # Additional data
-    metadata_json = Column('metadata', JSON, default={})
+    metadata_json = Column('metadata_data', JSON, default={})
 
     # Relationships
     landlord = relationship("Landlord", back_populates="properties")

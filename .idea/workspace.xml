@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e621a3cc-d9ed-499e-8060-d8b11f1f2945" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/api/routes/integration.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/routes/integration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +16,10 @@
     <persistenceIdMap>
       <entry key="_/home/locha_dev/Dev/local/LandlordMjanja/backend" value="39cqnnztvmsFsY1VfSD9aSIHbGD" />
     </persistenceIdMap>
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="37" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -97,6 +101,7 @@
       <workItem from="1771935643781" duration="312000" />
       <workItem from="1771955388156" duration="4419000" />
       <workItem from="1772002388008" duration="14036000" />
+      <workItem from="1772088481225" duration="597000" />
     </task>
     <servers />
   </component>
