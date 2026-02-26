@@ -10,7 +10,7 @@ from services.accounting_service import accounting_service
 from models.payment import Payment as PaymentModel, PaymentStatus
 from models.tenant import Tenant as TenantModel
 from models.reminder import Reminder, ReminderType, ReminderStatus
-from models.issue import Issue as IssueModel
+from models.tenant import Issue as IssueModel
 
 router = APIRouter(prefix="", tags=["Integration"])
 
