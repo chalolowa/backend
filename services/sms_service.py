@@ -10,6 +10,11 @@ logger = logging.getLogger(__name__)
 class SMSService:
     def __init__(self):
         # Initialize Africa's Talking
+        if not AFRICASTALKING_USERNAME or not AFRICASTALKING_API_KEY:
+            logger.warning(
+                "AfricasTalking credentials are not set (AFRICASTALKING_USERNAME/API_KEY); "
+                "SMS functionality will fail until they are provided."
+            )
         africastalking.initialize(
             username=AFRICASTALKING_USERNAME,
             api_key=AFRICASTALKING_API_KEY

@@ -212,21 +212,32 @@ async def send_reminder(
         amount=balance,
         due_date=date.today().strftime("%Y-%m-%d")
     )
-
-    if result["success"]:
-        # Create reminder record
-        reminder = Reminder(
-            landlord_id=current_landlord.id,
-            tenant_id=tenant_id,
-            reminder_type=ReminderType.PAYMENT,
-            message=f"Payment reminder for KES {balance:,.0f}",
-            delivery_method="sms",
-            status=ReminderStatus.SENT,
-            sent_at=datetime.utcnow(),
-            at_message_id=result.get("message_id")
+    # If the underlying SMS provider reports failure we convert that into
+    # an HTTP error so the caller can react appropriately.  Prior versions
+    # simply returned the raw result object and the frontend always showed a
+    # success toast; this made debugging impossible when authentication
+    # credentials were wrong (see log "The supplied authentication is
+    # invalid").
+    if not result.get("success"):
+        logging.error(f"sms send failed for tenant {tenant_id}: {result.get('error')}")
+        raise HTTPException(
+            status_code=502,
+            detail=f"SMS service error: {result.get('error')}"
         )
-        db.add(reminder)
-        db.commit()
+
+    # record the reminder only when the send succeeded
+    reminder = Reminder(
+        landlord_id=current_landlord.id,
+        tenant_id=tenant_id,
+        reminder_type=ReminderType.PAYMENT,
+        message=f"Payment reminder for KES {balance:,.0f}",
+        delivery_method="sms",
+        status=ReminderStatus.SENT,
+        sent_at=datetime.utcnow(),
+        at_message_id=result.get("message_id")
+    )
+    db.add(reminder)
+    db.commit()
 
     return result
 
